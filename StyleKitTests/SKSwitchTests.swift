@@ -37,7 +37,7 @@ class SKSwitchTests: XCTestCase {
         let _switch = SKSwitch()
         
         // when
-        _switch.style = style
+        _switch.targetStyle = style
         
         // then
         XCTAssertNotNil(style)
