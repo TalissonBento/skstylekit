@@ -47,7 +47,7 @@ class SKBaseConditionProcessor: SKConditionProcessor {
             throw SKError.invalidCondition(key)
         }
         
-        var conditions = try grouppedConditions(fromKey: key)
+        let conditions = try grouppedConditions(fromKey: key)
         
         for group in conditions.keys {
             

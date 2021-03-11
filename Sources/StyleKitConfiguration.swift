@@ -59,6 +59,15 @@ import Foundation
         sources.append(SKStyleKitSource.bundle(bundle, zIndex: 0))
     }
     
+    /**
+        Adds data source for styles to configuration
+     
+        - parameter data: JSON file pre loaded
+    */
+    public func addData(data: Data) {
+        sources.append(SKStyleKitSource.data(data, zIndex: 0))
+    }
+    
     // MARK: - Factory -
     /**
         Default configuration factory method

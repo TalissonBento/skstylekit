@@ -36,6 +36,19 @@ class SKStylesSourceTests: XCTestCase {
         XCTAssertTrue(stylesSource.source.count > 0)
     }
     
+    func testInitFromData() {
+        
+        // given
+        let url = Bundle(for: SKStylesSourceTests.self).url(forResource: "TestStyleJson1", withExtension: "json")
+        let data = try? Data(contentsOf: url!)
+        
+        // when
+        let stylesSource = SKStylesSourceProvider(data: data!, sourceType: .other)!
+        
+        // then
+        XCTAssertTrue(stylesSource.source.count > 0)
+    }
+    
     func testSort() {
         
         // given

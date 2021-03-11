@@ -12,6 +12,7 @@ enum SKStyleKitSourceLocation {
     
     case bundle(Bundle)
     case file(String)
+    case data(Data)
 }
 
 enum SKStylesSourceType: Int {
@@ -39,19 +40,24 @@ public final class SKStyleKitSource {
     // MARK: - Providers -
     func getProviders() -> [SKStylesSourceProvider] {
         
-        let files: [String]
+        var providers = [SKStylesSourceProvider]()
         
         switch location {
         
             case .bundle(let bundle):
                 
                 guard let bundleFiles = try? FileManager.default.contentsOfDirectory(atPath: bundle.bundlePath) else { return [] }
-                files = bundleFiles.filter({ $0.hasPrefix("style") && $0.hasSuffix(".json") }).compactMap({ bundle.path(forResource: $0, ofType: nil) })
+                let files = bundleFiles.filter({ $0.hasPrefix("style") && $0.hasSuffix(".json") }).compactMap({ bundle.path(forResource: $0, ofType: nil) })
+                let fileProviders = files.compactMap { SKStylesSourceProvider(filePath: $0, sourceType: type, zIndex: zIndex) }
+                fileProviders.forEach { providers.append($0) }
+            case .file(let path):
                 
-            case .file(let path): files = [path]
+                providers.append( SKStylesSourceProvider(filePath: path, sourceType: type, zIndex: zIndex)! )
+            case .data(let data):
+                
+                providers.append( SKStylesSourceProvider(data: data, sourceType: type, zIndex: zIndex)! )
         }
-        
-        return files.compactMap { SKStylesSourceProvider(filePath: $0, sourceType: type, zIndex: zIndex) }
+        return providers
     }
     
     // MARK: - Factory -
@@ -69,5 +75,9 @@ public final class SKStyleKitSource {
 
     public class func bundle(_ bundle: Bundle, zIndex: Int = 0)-> SKStyleKitSource {
         return SKStyleKitSource(location: .bundle(bundle), type: .other, zIndex: zIndex)
+    }
+    
+    public class func data(_ data: Data, zIndex: Int = 0) -> SKStyleKitSource {
+        return SKStyleKitSource(location: .data(data), type: .other, zIndex: zIndex)
     }
 }

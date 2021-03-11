@@ -27,12 +27,15 @@ class SKStylesSourceProvider {
     private(set) var zIndex: Int = 0
     private(set) var sourceType: SKStylesSourceType = .other
     
-    // MARK: - Init
-    init?(filePath: String, sourceType: SKStylesSourceType, zIndex: Int = 0) {
+    // MARK: - Init With File
+    convenience init?(filePath: String, sourceType: SKStylesSourceType, zIndex: Int = 0) {
         guard let data = try? Data(contentsOf: URL(fileURLWithPath: filePath)) else { return nil }
-        
+        self.init(data: data, sourceType: sourceType, zIndex: zIndex)
+    }
+    
+    // MARK: - Init With Data
+    init?(data: Data, sourceType: SKStylesSourceType, zIndex: Int = 0) {
         self.zIndex = zIndex
-        
         do {
 
             if let source = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions()) as? [String: Any] {
@@ -57,7 +60,7 @@ class SKStylesSourceProvider {
         }
         catch {
             
-            StyleKit.log("Style kit: Error loading style json from \(filePath)")
+            StyleKit.log("Style kit: Error loading style json")
             return nil
         }
     }
