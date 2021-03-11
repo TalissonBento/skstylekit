@@ -14,5 +14,5 @@ Pod::Spec.new do |s|
 
     s.source_files          = 'Sources/*.swift'
     s.resources             = 'Res/*.json'
-    s.source                = { :git => 'https://github.com/motylevm/skstylekit.git', :tag => s.version }
+    s.source                = { :git => 'https://github.com/TalissonBento/skstylekit.git', :tag => s.version }
 end
